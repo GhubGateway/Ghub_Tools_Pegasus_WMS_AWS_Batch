@@ -1,0 +1,350 @@
+#1 [internal] load build definition from Dockerfile.ghubex1
+#1 sha256:4c6a370b021a5cc7b6ed3569f54b3c48ee77f62af8df85b241f4d408d6dec57c
+#1 transferring dockerfile: 13.26kB 0.1s done
+#1 DONE 0.2s
+
+#2 [internal] load .dockerignore
+#2 sha256:a16002ae89cd0957cd84befb6fb802e27b5f2ab3884d83bb74331af2794d1eef
+#2 transferring context: 2B done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/rockylinux:8
+#3 sha256:c5022588b18f164af5d380d35e32c2ad571098a94441b65b3f111ca9ffef18ce
+#3 DONE 1.5s
+
+#4 [ 1/79] FROM docker.io/library/rockylinux:8@sha256:9794037624aaa6212aeada1d28861ef5e0a935adaf93e4ef79837119f2a2d04c
+#4 sha256:bfd3f1f553990fece3cc8335252790d35e43e6ed622afbede0d869ba6e963582
+#4 DONE 0.0s
+
+#20 [internal] load build context
+#20 sha256:e60f87a7f0096e6cd0ab875d7e39347f9c1a333033aa15432902e16550ee8219
+#20 transferring context: 114.64MB 3.4s
+#20 transferring context: 149.21MB 4.6s done
+#20 DONE 4.6s
+
+#18 [15/79] RUN usermod -a -G condor jovyan
+#18 sha256:4236db49cf2f2d10fff26b876eaaa0508681e67354bc04fde51bf2cbcb84b6f9
+#18 CACHED
+
+#38 [34/79] RUN chmod +x install_conda_environment_and_kernel.sh
+#38 sha256:9e3035812fc048333eb14dd84c52949e320b21184dd0e23c4ccf99d20485e0d8
+#38 CACHED
+
+#34 [30/79] RUN conda install -c conda-forge --name base jupyter jupyterhub==5.2.1 -y
+#34 sha256:5f2b99796ad4f704428109c2cd9b6746b6aa4775bbdd5b1d876e23302e7a027f
+#34 CACHED
+
+#26 [22/79] COPY ./anaconda/Miniconda3-py310_25.11.1-1-Linux-x86_64.sh /home/anaconda
+#26 sha256:42d5eb51d123159e619d0e2a16747e87dc97a5e85fff61f948413f1c397209d7
+#26 CACHED
+
+#28 [24/79] RUN chmod +x Miniconda3-py310_25.11.1-1-Linux-x86_64.sh
+#28 sha256:7ab57a11596d21d69e52f4529a3e4781015e511fab770c3915a52dccaefd4196
+#28 CACHED
+
+#13 [10/79] RUN cat /etc/yum.repos.d/htcondor-stable-rhel8.repo
+#13 sha256:e764de2fe87a14e37e6422b2818ee37f96a5e4a6c9471d04fa79f926310da09c
+#13 CACHED
+
+#6 [ 3/79] RUN dnf -y groupinstall "Development Tools"
+#6 sha256:6a6ec03e9240476cb2952e70d5413bf4ae9c67a6fc1764604639a0d9bac42ba3
+#6 CACHED
+
+#12 [ 9/79] RUN cd /etc/yum.repos.d &&     wget https://research.cs.wisc.edu/htcondor/yum/repo.d/htcondor-stable-rhel8.repo
+#12 sha256:54c32230f26aa453d3722413af9cfc6ceb5c51b36f691ae18dc781d16368a543
+#12 CACHED
+
+#19 [16/79] RUN chmod -R g+w /var/{lib,log,lock,run}/condor
+#19 sha256:f375b654c094052caf21fbbb2fa2b9c4952628da00b322868f89a0e5163f1ff5
+#19 CACHED
+
+#24 [20/79] WORKDIR /home
+#24 sha256:4fa34b1409ce1d63181f4d34ca544859696f00a536e4f4490723b7d7e9de6ae8
+#24 CACHED
+
+#31 [27/79] RUN conda --version
+#31 sha256:bca6c9f6bd4527b599a47f71d38751a74cc9c9faf5065c4a2972f73f2dac8f94
+#31 CACHED
+
+#35 [31/79] WORKDIR /home
+#35 sha256:904197ee41e1951dfe4fe0ecea2fa82b40ede994d3ae651322c6e7dc3c7b77fe
+#35 CACHED
+
+#8 [ 5/79] RUN cp /usr/share/zoneinfo/America/New_York /etc/localtime
+#8 sha256:7f200d4afbdf6c983b8bab4d9c7292be090cb6b3e437bfb531deeff92e9a1bfb
+#8 CACHED
+
+#15 [12/79] RUN cat /etc/yum.repos.d/htcondor-stable-rhel8.repo
+#15 sha256:716f9a2a079a614d698c5c9793b79ad003319633bd96171047ca8db6f0dc7539
+#15 CACHED
+
+#25 [21/79] RUN mkdir anaconda
+#25 sha256:d8df66622bf1e466299a71ea628434a1719a4dc241714f9a0ea935b917f444fc
+#25 CACHED
+
+#14 [11/79] RUN sed -i 's|yum/stable/8.8/rhel8|repo/8.8/el8/release/|g' /etc/yum.repos.d/htcondor-stable-rhel8.repo
+#14 sha256:e195015490eb5c56673e16878a35e32b26a077bfb2a2042bcc66f1a114d97f0b
+#14 CACHED
+
+#39 [35/79] RUN /bin/bash install_conda_environment_and_kernel.sh pegasus-env
+#39 sha256:928aebaff531fcd1abdd8ec5ed224d1c5c9a3b85d3706da972cdd5935b7f6eee
+#39 CACHED
+
+#7 [ 4/79] RUN dnf -y install --allowerasing --nobest      curl      docker-ce      glibc-langpack-en      java-11-openjdk-devel      jq      langpacks-en      nano      perl-Getopt-Long      sudo      supervisor      tar      vim      wget
+#7 sha256:25aaa484334a1eabc6b3c3590a4f7c68998ec5d2c547d67db853fe63664e371e
+#7 CACHED
+
+#17 [14/79] RUN sed -i 's/condor@/${NB_USER}@/g' /etc/condor/config.d/00-minicondor
+#17 sha256:0c4e90a20cd32e717aed88e9582ebae6528fda2614a9aab73a895927834044f1
+#17 CACHED
+
+#10 [ 7/79] RUN wget https://research.cs.wisc.edu/htcondor/yum/RPM-GPG-KEY-HTCondor
+#10 sha256:0e0e41547371db3035cf31da1e1b1c7cad70942e865b4094d1f7f1cea17b3fdd
+#10 CACHED
+
+#23 [19/79] RUN pegasus-version -f
+#23 sha256:268ce1321e87532855462e35e226924b4d205f524e9a0c521a9283fbf0309221
+#23 CACHED
+
+#37 [33/79] WORKDIR /home/anaconda
+#37 sha256:bb6ddff8c478c7646184cf9672c94f2507a9e49522fdeb3f32a9521fa6986ebb
+#37 CACHED
+
+#11 [ 8/79] RUN rpm --import RPM-GPG-KEY-HTCondor
+#11 sha256:603677da880e482b883ccff6a04684b76f3c51cba463255ec2ae0defb7b25c71
+#11 CACHED
+
+#16 [13/79] RUN dnf clean all && dnf install -y condor minicondor
+#16 sha256:542148c41ef57a0e519f534e6a49e86ea14c600e5ee683fefaa9166858ea59eb
+#16 CACHED
+
+#27 [23/79] WORKDIR /home/anaconda
+#27 sha256:1254ee1315baeb864318a625f3dc3f361191065392071710fb5a6dcb0cc27b90
+#27 CACHED
+
+#29 [25/79] RUN /bin/bash Miniconda3-py310_25.11.1-1-Linux-x86_64.sh -b -p /home/anaconda/anaconda-7
+#29 sha256:1bcc65edd2714ad0f2e2d66a40bb763ac4bd89e9da225ffd2cc7a129a16d6070
+#29 CACHED
+
+#5 [ 2/79] RUN dnf -y update &&     dnf -y install 'dnf-command(config-manager)' &&     dnf -y config-manager --set-enabled powertools &&     dnf -y config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo &&     dnf -y install epel-release
+#5 sha256:90548f2d0d6ce36a4455a437482808dd96759dfcac596e6127e020835bfc00ea
+#5 CACHED
+
+#30 [26/79] RUN which conda
+#30 sha256:aa9c2a91c8666bef3cc6bc2158622a8563507ddb912fd94fbd8885a2b56bed80
+#30 CACHED
+
+#21 [17/79] ADD ./submithost/pegasus-wms-setup-files/config/10-dynamic-slots /etc/condor/config.d/10-dynamic-slots
+#21 sha256:e0431c6f66b36ad1e8a3d896946afc3ac92cc574ae05d701687ed99dcee95cd6
+#21 CACHED
+
+#33 [29/79] RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
+#33 sha256:7260aec56bdf402c30123bb1555c93a6d9fbc0d4e846d79d24e716160d7a7192
+#33 CACHED
+
+#9 [ 6/79] RUN groupadd --gid 1000 jovyan || true &&     useradd --gid 1000 --uid 1000 --create-home --password '$6$ouJkMasm5X8E4Aye$QTFH2cHk4b8/TmzAcCxbTz7Y84xyNFs.gqm/HWEykdngmOgELums1qOi3e6r8Z.j7GEA9bObS/2pTN1WArGNf0' jovyan
+#9 sha256:97888b235cc0bc58232c32ad4184ccf93be2ca6c3c357f5a7853f43c9ad530ec
+#9 CACHED
+
+#36 [32/79] COPY ./anaconda/install_conda_environment_and_kernel.sh /home/anaconda/install_conda_environment_and_kernel.sh
+#36 sha256:761349463b949279c4aeca6b7f7bb43f63c3177a87ee9e59b7847b93f0acb81a
+#36 CACHED
+
+#22 [18/79] RUN dnf -y install https://download.pegasus.isi.edu/pegasus/5.0.9/pegasus-5.0.9-1.el8.x86_64.rpm
+#22 sha256:4fb952ce1ee1b9c93b04a5862caa88d68c2cb3143fda4414300918849655b4b5
+#22 CACHED
+
+#32 [28/79] RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
+#32 sha256:163487a47159e5cdb72e294297d659b3af903fdaed0df70f3d4463bdd06576b6
+#32 CACHED
+
+#40 [36/79] RUN cp /usr/share/zoneinfo/America/New_York /etc/localtime
+#40 sha256:4953d984da4a88b62c3c9879602ecdd5a3f3b5d94162c3bc8408de437d202deb
+#40 CACHED
+
+#41 [37/79] ADD ./submithost/amazon-aws-credentials/.aws/credentials /root/.aws/credentials
+#41 sha256:57fa90874d7a76b8acb9885ce07f0031f7ba19d4f2d40c36531259f2547503c7
+#41 DONE 0.3s
+
+#42 [38/79] ADD ./submithost/amazon-aws-credentials/.pegasus /root/.pegasus
+#42 sha256:60f0ca5d934583e60a1a895d604f00daa480ef9c4972d6132da34892758a252b
+#42 DONE 0.0s
+
+#43 [39/79] ADD ./submithost/amazon-aws-credentials/.aws /home/jovyan/.aws
+#43 sha256:3b906cdc7e228f40a8ac6ea02e88a1e8bfe6c6bdbb71599937839ef7a8c0acc7
+#43 DONE 0.0s
+
+#44 [40/79] RUN chown -R jovyan:jovyan /home/jovyan/.aws
+#44 sha256:94ce1ed9c95139f084a882db8e4886f25b9a8264b7422c7864e0fb35b9d02f6b
+#44 DONE 0.3s
+
+#45 [41/79] ADD ./submithost/amazon-aws-credentials/.pegasus/credentials.conf /home/jovyan/.pegasus/credentials.conf
+#45 sha256:d384ed3e328d422d1c033cfb3533ea89105cd17c6b30670b57e54c2c94075fc7
+#45 DONE 0.0s
+
+#46 [42/79] RUN chown -R jovyan:jovyan /home/jovyan/.pegasus/credentials.conf
+#46 sha256:02dacf89fd3e3de0252dd95749b960b8f8a5642cfd78328b0d5f2e9cc80e2ebf
+#46 DONE 0.2s
+
+#47 [43/79] RUN chmod 600 /home/jovyan/.pegasus/credentials.conf
+#47 sha256:9cc9c5df5d6794f83679f8324b0cf194c7afa3e392118f8fd5ece91af623d5a4
+#47 DONE 0.3s
+
+#48 [44/79] ADD ./submithost/pegasus-wms-setup-files/config/start.sh /start.sh
+#48 sha256:57857aa586978bc230df8e6a6b452430f41deb27b35cf1c0cc118f4b3c41fb49
+#48 DONE 0.0s
+
+#49 [45/79] ADD ./submithost/pegasus-wms-setup-files/config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+#49 sha256:268e68b33f7b5aad6a80ffc4cfaf15326cd9f6a2f2dc49c66286649d8e217582
+#49 DONE 0.0s
+
+#50 [46/79] ADD ./submithost/pegasus-wms-setup-files/config/wrapdocker /usr/local/bin/wrapdocker
+#50 sha256:34d194dbea38d7e782d3eb7c352db7377b5795c778fe4064a83a9a739c56eda7
+#50 DONE 0.0s
+
+#51 [47/79] ADD ./submithost/pegasus-wms-setup-files/config/htcondor-wrapper /usr/local/bin/htcondor-wrapper
+#51 sha256:53a33b999ab4947eba6f971efd40ad67147862b27b1130f8536331d1e48fb9e2
+#51 DONE 0.0s
+
+#52 [48/79] RUN chmod +x /usr/local/bin/wrapdocker /usr/local/bin/htcondor-wrapper
+#52 sha256:5180efff4c7065b71c6c9dc10269236677c3522873dd821a73af4ed9aa3dcab2
+#52 DONE 0.3s
+
+#53 [49/79] RUN usermod -aG docker jovyan
+#53 sha256:a37a326d763ebee01f60d324f37a5be35257ca8eb764eb1cf8322d2c3c908864
+#53 DONE 0.3s
+
+#54 [50/79] ADD ./submithost/pegasusrc /home/jovyan/ghubex1/pegasusrc
+#54 sha256:5b66012e903310fab27a51b28a6e54e7ee2b203886de1c2e68e30af2960ade96
+#54 DONE 0.0s
+
+#55 [51/79] ADD ./submithost/pegasusrc /home/jovyan/ghubex1/pegasusrc_template
+#55 sha256:5b6b1f6ababdc1c23b233c23f1274239ede93de8a6d10e586cf5b80cfba750e8
+#55 DONE 0.0s
+
+#56 [52/79] ADD ./submithost/pegasus-wms-scripts /home/jovyan/ghubex1/pegasus-wms-scripts
+#56 sha256:d68ee80bb47bde51fbe23208dee0fa1c74e9b068038c70e773ea5ac0e9897f7c
+#56 DONE 0.0s
+
+#57 [53/79] RUN echo -e "condor_master > /dev/null 2>&1" >> /home/jovyan/.bashrc
+#57 sha256:69d40a2addcbcf328e5d3b631af3b524d74eaee4594cba5628bcaf77ffb7bfdc
+#57 DONE 0.2s
+
+#58 [54/79] RUN mkdir /home/jovyan/ghubex1/conf
+#58 sha256:35e773544ffb29d8bd6cfdf0b609a6dda2131ad260b9e37391a17eb86ce1ada4
+#58 DONE 0.3s
+
+#59 [55/79] ADD ./submithost/pegasus-wms-configuration-files/compute-env.json /home/jovyan/ghubex1/conf/compute-env.json
+#59 sha256:01f2c8a59af5caf9070e2e41a6810e9bced25d7aa40d8c0063f25091d392577c
+#59 DONE 0.0s
+
+#60 [56/79] ADD ./submithost/pegasus-wms-configuration-files/compute_env_json_template /home/jovyan/ghubex1/conf/compute_env_json_template
+#60 sha256:b46f67c139424bf4f4698e7871c2ff9ace42f133b567f0ef0a99c58b3a0237a9
+#60 DONE 0.0s
+
+#61 [57/79] ADD ./submithost/pegasus-wms-configuration-files/job-definition.json /home/jovyan/ghubex1/conf/job-definition.json
+#61 sha256:69d40ad780b2f2346d054b85278ce74e5736c6808d4c0dc751dd2312d88a7b70
+#61 DONE 0.1s
+
+#62 [58/79] ADD ./submithost/pegasus-wms-configuration-files/job-definition.json /home/jovyan/ghubex1/conf/job_definition_json_template
+#62 sha256:2964f8a4fd1b9a6c611900a270c50c4169c3be881e49bcdda0ea9713368a7f66
+#62 DONE 0.0s
+
+#63 [59/79] ADD ./submithost/pegasus-wms-configuration-files/job-queue.json /home/jovyan/ghubex1/conf/job-queue.json
+#63 sha256:d0f77558acbd1cc4571d539633cdda0279df7952c775ad254555cf678bf445f9
+#63 DONE 0.0s
+
+#64 [60/79] ADD ./submithost/pegasus-wms-configuration-files/sites.xml /home/jovyan/ghubex1/conf/sites.xml
+#64 sha256:bb02f5c364f9839644a308e28487a5cbdfba4c6f7a2a9b30daad06739d847081
+#64 DONE 0.0s
+
+#65 [61/79] RUN echo -e "#!/usr/bin/env python3\nUSERNAME='jovyan'\nPASSWORD='jovyan123'\nAUTHENTICATION='NoAuthentication'\nSERVER_HOST='0.0.0.0'\n" >> /home/jovyan/.pegasus/service.py     && chmod u+x /home/jovyan/.pegasus/service.py
+#65 sha256:9c20697dfc37e193f6f658349351c5067db2292cf989bb8eb3fab386f1804048
+#65 DONE 0.2s
+
+#66 [62/79] RUN mkdir -p /home/jovyan/.jupyter
+#66 sha256:fd9b7aa424d0f38d14484985f7f2f4924d53fe919f9978f1f8e13440c4cf679b
+#66 DONE 0.2s
+
+#67 [63/79] WORKDIR /home/jovyan
+#67 sha256:9e2cf5d701964a477f84da576c4e40016cf1c7f6dddff75371cf2620756d6b31
+#67 DONE 0.0s
+
+#68 [64/79] COPY ./tools/ghubex1 /home/jovyan/ghubex1
+#68 sha256:02a33736ec4061ad93e2b5440d89dfaadd8ed3c32b0897dac83797df88f6f042
+#68 DONE 0.1s
+
+#69 [65/79] RUN chmod 555 /home/jovyan/ghubex1/remotebin/Bash/Bash_Launch.sh
+#69 sha256:59952474f6aed1931547cc7cb55967a4c4f1cdb88a3092330f5e7f4f1adff75f
+#69 DONE 0.2s
+
+#70 [66/79] RUN chmod 555 /home/jovyan/ghubex1/remotebin/C/C_Build.sh
+#70 sha256:a8f47b9f6ba7720bc637f9682d4c52ead4ee9ce63827653007945cdc6bd53786
+#70 DONE 0.3s
+
+#71 [67/79] RUN chmod 555 /home/jovyan/ghubex1/remotebin/C/C_Launch.sh
+#71 sha256:0152fe83f89e2f0981f0d41ca5d988421c42697acf38ad8f164eef3bf16cd7a0
+#71 DONE 0.3s
+
+#72 [68/79] RUN chmod 555 /home/jovyan/ghubex1/remotebin/CPP/CPP_Build.sh
+#72 sha256:2700a766ae3d3be615af05bcc0e07b0732df8e1985803e9e4210472d54c15fdc
+#72 DONE 0.2s
+
+#73 [69/79] RUN chmod 555 /home/jovyan/ghubex1/remotebin/CPP/CPP_Launch.sh
+#73 sha256:43c44f905d092db72f2c63e1cacdb88539812d1a95f6e2e82f4fa55984dc6c05
+#73 DONE 0.3s
+
+#74 [70/79] RUN chmod 555 /home/jovyan/ghubex1/remotebin/Fortran/Fortran_Build.sh
+#74 sha256:68c47a9f7bcdd1034942901a0dec54ae2b0dcb1b5bcf7e5c2b377da09345182c
+#74 DONE 0.3s
+
+#75 [71/79] RUN chmod 555 /home/jovyan/ghubex1//remotebin/Fortran/Fortran_Launch.sh
+#75 sha256:2fa2093416e21ca15c942c5f32ea58d94ff6d3defa7671654496221fc8edba20
+#75 DONE 0.2s
+
+#76 [72/79] RUN chmod 555 /home/jovyan/ghubex1/remotebin/Python/Python_Launch.sh
+#76 sha256:98fbf1b65eaa1c885ccdfb2ef406f87b0b887d10d62abb4cf7419daf65758b86
+#76 DONE 0.3s
+
+#77 [73/79] RUN chmod 555 /home/jovyan/ghubex1/remotebin/R/R_Launch.sh
+#77 sha256:811a8e91f3af6c656604890f225356a45c825bfc293b8e8f37bd8a743a04b0a8
+#77 DONE 0.2s
+
+#78 [74/79] RUN chown -R jovyan:jovyan /home/jovyan
+#78 sha256:f0119bb0331f865f912dcabff8888bf98d7347dd973b2c7fd06d82938f2f14ca
+#78 DONE 0.6s
+
+#79 [75/79] RUN echo -e "jovyan ALL=(ALL)       NOPASSWD:ALL\n" >> /etc/sudoers
+#79 sha256:ef9977b456ac4c87f432dbbd6d4b34725b6f9968c2ffb92bae29de9cd6008976
+#79 DONE 0.3s
+
+#80 [76/79] WORKDIR /home/jovyan
+#80 sha256:e8151e92f9bbed745d086b7683541e7c7f715c3de1a48bb02e04d2ea50c612fd
+#80 DONE 0.1s
+
+#81 [77/79] RUN pegasus-db-admin create
+#81 sha256:ddd2e12f23a0e468aae9f92c868e1fc0167dc197899f2ab6f4af063d4e50c882
+#81 0.311 Pegasus requires the Python3 GitPython module to be installed
+#81 0.312 Please install it via your OS package manager, via pip, or activate a venv which includes the module.
+#81 0.312 The PYTHONPATH is ['/usr/lib64/python3.6/site-packages/Pegasus/cli', '/home/anaconda/anaconda-7/lib/python310.zip', '/home/anaconda/anaconda-7/lib/python3.10', '/home/anaconda/anaconda-7/lib/python3.10/lib-dynload', '/home/anaconda/anaconda-7/lib/python3.10/site-packages']
+#81 0.312 
+#81 2.199 Pegasus database was successfully created.
+#81 2.199 Database version: '5.0.9' (sqlite:////home/jovyan/.pegasus/workflow.db)
+#81 DONE 2.3s
+
+#82 [78/79] RUN echo -e "export PATH=/home/jovyan/.pyenv/bin:$PATH:/usr/lib64/mpich/bin" >> /home/jovyan/.bashrcƒ
+#82 sha256:34456f0903dd30ddc6ce0018f727eebc1c1e331e7241bd92131ffb9109074a32
+#82 DONE 0.3s
+
+#83 [79/79] RUN echo "{ "NotebookApp": { "password": "sha1:30a323540baa:6eec8eaf3b4e0f44f2f2aa7b504f80d5bf0ad745" } }" >> /home/jovyan/.jupyter/jupyter_notebook_config.json
+#83 sha256:8cd9b9a8e33fbe4f635d708fe0751b5962499191f7d6339a34f2f62a793e5811
+#83 DONE 0.3s
+
+#84 exporting to image
+#84 sha256:e8c613e07b0b7ff33893b694f7759a10d42e180f2b4dc349fb57dc6b71dcab00
+#84 exporting layers
+#84 exporting layers 0.5s done
+#84 writing image sha256:f028403220cf07790b03c981d87c1af4c69cd1d24d2dd185ecbd096d2591dc8a
+#84 writing image sha256:f028403220cf07790b03c981d87c1af4c69cd1d24d2dd185ecbd096d2591dc8a done
+#84 naming to docker.io/library/ghubex1_tool_image:latest done
+#84 DONE 0.5s

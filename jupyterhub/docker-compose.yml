@@ -1,0 +1,27 @@
+# docker-compose.yml - JupyterHub deployment
+services:
+  jupyterhub:
+    build:
+      context: .
+      dockerfile: Dockerfile.hub
+    container_name: jupyterhub
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount the Docker socket so JupyterHub can spawn containers
+      - /var/run/docker.sock:/var/run/docker.sock:rw
+      # Persist JupyterHub's database (user accounts, server states)
+      - ./jupyterhub-data:/srv/jupyterhub/data
+    #environment:
+      #- DOCKER_NETWORK_NAME=jupyterhub-network
+    networks:
+      - jupyterhub-network
+
+    restart: unless-stopped
+
+networks:
+  jupyterhub-network:
+    name: jupyterhub-network
+
+#volumes:
+  #jupyterhub-data:

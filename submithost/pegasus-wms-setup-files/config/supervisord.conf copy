@@ -1,0 +1,41 @@
+[supervisord]
+nodaemon=true
+
+[program:docker]
+command=/usr/local/bin/wrapdocker
+autorestart=True
+startsecs=60
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+redirect_stderr=true
+
+[program:condor_master]
+user=jovyan
+command=/usr/local/bin/htcondor-wrapper
+autorestart=True
+startsecs=60
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+redirect_stderr=true
+
+[program:jupyter]
+user=jovyan
+command=jupyter notebook /home/jovyan/ghubex1/ghubex1.ipynb --notebook-dir=/home/jovyan/ghubex1 --port=8888 --no-browser --ip=0.0.0.0 --allow-root
+autorestart=True
+startsecs=60
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+redirect_stderr=true
+environment = HOME="/home/jovyan",USER="jovyan"
+
+
+[program:dashboard]
+user=jovyan
+command=pegasus-service --host 0.0.0.0
+autorestart=True
+startsecs=60
+stdout_logfile=/dev/stdout
+stdout_logfile_maxbytes=0
+redirect_stderr=true
+environment = HOME="/home/jovyan",USER="jovyan"
+
