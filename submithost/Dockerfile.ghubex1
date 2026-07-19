@@ -125,20 +125,6 @@ RUN dnf -y install https://download.pegasus.isi.edu/pegasus/$PEGASUS_VERSION/peg
 RUN pegasus-version -f
 
 # ====================================================================
-# Octave installation
-# ====================================================================
-
-# Reverified on Sept 12, 2024, the default version of Octave installed is version 5.2.0.
-# For Octave 5.2.0, qt not available as a graphics toolkit,
-# available_graphics_toolkits() only displays gnuplot.
-# Also see: https://trac.macports.org/ticket/58275.
-# Created ./emulator/bin/view_phm.py based on ./emulator/bin/view_phm.m which depends on qt.
-
-#RUN dnf -y install --allowerasing --nobest \
-     #octave \
-     #octave-devel
-
-# ====================================================================
 # Anaconda installations
 # ====================================================================
 
@@ -151,7 +137,7 @@ COPY ./anaconda/Miniconda3-py310_25.11.1-1-Linux-x86_64.sh /home/anaconda
 
 WORKDIR /home/anaconda
 
-ENV CONDA_DIR=/home/anaconda/anaconda-7
+ENV CONDA_DIR=/home/anaconda/rocky8
 RUN chmod +x Miniconda3-py310_25.11.1-1-Linux-x86_64.sh
 RUN /bin/bash Miniconda3-py310_25.11.1-1-Linux-x86_64.sh -b -p $CONDA_DIR
 ENV PATH=$CONDA_DIR/bin:$PATH
@@ -166,12 +152,13 @@ RUN conda install -c conda-forge --name base jupyter jupyterhub==5.2.1 -y
 
 WORKDIR /home
 
-COPY ./anaconda/install_conda_environment_and_kernel.sh /home/anaconda/install_conda_environment_and_kernel.sh
+COPY ./anaconda/install_conda_environment_and_kernel_from_yml.sh /home/anaconda/install_conda_environment_and_kernel_from_yml.sh
+COPY ./anaconda/rocky8_pegasus-env_environment.yml /home/anaconda/rocky8_pegasus-env_environment.yml
 WORKDIR /home/anaconda
 
 # Install the pegasus-wms environment and kernel
-RUN chmod +x install_conda_environment_and_kernel.sh
-RUN /bin/bash install_conda_environment_and_kernel.sh pegasus-env
+RUN chmod +x install_conda_environment_and_kernel_from_yml.sh
+RUN /bin/bash install_conda_environment_and_kernel_from_yml.sh rocky8 pegasus-env
 
 # Appmode - Jupyter extension that turns notebooks into web applications
 #RUN python3 -m pip install appmode
