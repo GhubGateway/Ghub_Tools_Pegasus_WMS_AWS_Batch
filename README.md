@@ -2,13 +2,15 @@
 
 This Jupyter Notebook tool repository provides an introductory tutorial and templates for running [Pegasus Workflow Management System (WMS)](https://pegasus.isi.edu) workflows for Ghub and provides Pegasus pipeline workflow templates that associates two simple workflow jobs to create a "Hello World" demonstration of Pegasus. 
 
-The repository contains a Dockerfile for JupyterHub DockerSpawner, which enables JupyterHub to provision an individual user notebook server within isolated Docker containers for the tool.
+- Templates are  provided for workflow jobs written in the `Bash`, `C`, `CPP`, `Fortran`, `MATLAB / Octave`, `Python` and `R` programming languages. Each programming language requires a different template because the scripts to launch the `Bash`, `Python`, and `R` scripts, and the scripts to build and launch the binary executables for the `C`, `CPP`, `Fortran`, and `MATLAB / Octave` source codes, are different for each programming language. The templates' scripts and source codes provide a guideline for you to create your Pegasus WMS workflow tool for Ghub.
 
-- Templates are  provided for workflow jobs written in the `Bash`, `C`, `CPP`, `Fortran`, `MATLAB`, `Python` and `R` programming languages. Each programming language requires a different template because the scripts to launch the `Bash`, `Python`, and `R` scripts, and the scripts to build and launch the binary executables for the `C`, `CPP`, `Fortran`, and `MATLAB` source codes, are different for each programming language. The templates' scripts and source codes provide a guideline for you to create your Pegasus WMS workflow tool for Ghub.  
+- `Python` template test complete. TODO: test the `Bash`, `C`, `CPP`, `Fortran`, `MATLAB / Octave` and `R` templates.  
 
 - The Pegasus WMS comprises software that automates and manages the execution of computational workflow jobs, including staging the jobs, distributing the work, submitting the jobs for execution, as well as handling data flow dependencies and overcoming job failures. The tool is designed to follow the Pegasus WMS, Amazon AWS Batch deployment scenario, which, in turn, is based on the [Amazon AWS Fetch & Run Example](https://aws.amazon.com/blogs/compute/creating-a-simple-fetch-and-run-aws-batch-job/). See the [Welcome to Pegasus WMS’s documentation! Deployment Scenarios](https://pegasus.isi.edu/documentation/user-guide/deployment-scenarios.html), Amazon AWS Batch section, for more information. 
 
-- The tool runs two Docker images, a remotehostimage Docker image and a submithostimage Docker image. The remotehostimage Docker image is the Fetch & Run Docker image and contains software to run the scripts and build and launch the binary executables for the templates, and, also includes the Bash Fetch & Run script and ENTRYPOINT. The submithostimage Docker image contains the software required to implement the workflow, including a Jupyter Notebook as the interface for running the workflow, HTCondor, and the Pegasus WMS.
+- This tool runs a Docker image for JupyterHub DockerSpawner, which enables JupyterHub to provision an individual user notebook server within isolated Docker containers for the tool.
+
+- The tool also runs two additional Docker images, a remotehostimage Docker image and a submithostimage Docker image. The remotehostimage Docker image is the Fetch & Run Docker image and contains software to run the scripts and build and launch the binary executables for the templates, and, also includes the Bash Fetch & Run script and ENTRYPOINT. The submithostimage Docker image contains the software required to implement the workflow, including a Jupyter Notebook as the interface for running the workflow, HTCondor, and the Pegasus WMS.
 
 ## One-Time Amazon AWS Batch Setup
 

@@ -4,7 +4,7 @@ import os
 
 # --- Spawner Configuration ---
 # Use DockerSpawner to create a container for each user.
-# DockerSpawner is a specific implementation that inherits from the abstract Spawner class
+# DockerSpawner is a specific implementation that inherits from tenvironhe abstract Spawner class
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 
 # The Docker image each user gets
@@ -23,7 +23,7 @@ notebook_dir = '/home/{username}/ghubex1'
 c.DockerSpawner.notebook_dir = notebook_dir
 c.DockerSpawner.volumes = {
     'jupyterhub-user-{username}': notebook_dir,
-    f'/Users/renettej/AAA_Ghub_Tools/Ghub_Tools_Rocky_Pegasus_WMS_AWS_Batch/submithost/LOCAL/shared-storage': {"bind": "/home/{username}/ghubex1/LOCAL/shared-storage", "mode": "rw"}
+    f'%s' %os.path.join(os.environ.get("HOST_DEPLOY_DIR"), "LOCAL", "shared-storage"): {"bind": "/home/{username}/ghubex1/LOCAL/shared-storage", "mode": "rw"}
 }
 
 # Default is /tree/ for jupyterlab

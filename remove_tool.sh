@@ -2,7 +2,6 @@
 tool_alias_name=$1
 echo "removing "${tool_alias_name}"..."
 
-rm -rf ./tools/${tool_alias_name}
 rm -f ./containers/${tool_alias_name}/Dockerfile.hub
 rm -f ./containers/${tool_alias_name}/docker-compose.yml
 rm -rf ./containers/${tool_alias_name}/jupyterhub-data

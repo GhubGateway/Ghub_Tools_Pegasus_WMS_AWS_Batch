@@ -12,8 +12,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:rw
       # Persist JupyterHub's database (user accounts, server states)
       - ./jupyterhub-data:/srv/jupyterhub/data
-    #environment:
-      #- DOCKER_NETWORK_NAME=jupyterhub-network
+    environment:
+      # c.DockerSpawner.volumes requires an absolute path because the Docker daemon running on the host machine performs the actual bind mount, and it cannot resolve relative paths without a full file system reference. Also see config/jupyterhub_config.py
+      - HOST_DEPLOY_DIR=${PWD}
     networks:
       - jupyterhub-network
 
