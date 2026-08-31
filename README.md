@@ -1,6 +1,6 @@
 # Ghub Pegasus WMS Tutorial and Templates
 
-This Jupyter Notebook tool repository provides an introductory tutorial and templates for running [Pegasus Workflow Management System (WMS)](https://pegasus.isi.edu) workflows for Ghub and provides Pegasus pipeline workflow templates that associates two simple workflow jobs to create a "Hello World" demonstration of Pegasus. 
+This Jupyter Notebook tool repository provides an introductory tutorial and templates for running [Pegasus Workflow Management System (WMS)](https://pegasus.isi.edu) workflows for Ghub and provides Pegasus pipeline workflow templates, based on the Ghub ghubex1 Jupyter Notebook tool, that associates two simple workflow jobs to create a "Hello World" demonstration of Pegasus. 
 
 - Templates are  provided for workflow jobs written in the `Bash`, `C`, `CPP`, `Fortran`, `MATLAB / Octave`, `Python` and `R` programming languages. Each programming language requires a different template because the scripts to launch the `Bash`, `Python`, and `R` scripts, and the scripts to build and launch the binary executables for the `C`, `CPP`, `Fortran`, and `MATLAB / Octave` source codes, are different for each programming language. The templates' scripts and source codes provide a guideline for you to create your Pegasus WMS workflow tool for Ghub.
 

@@ -15,7 +15,7 @@ cp -f ./submithost/pegasus-wms-configuration-files/job_definition_json_template 
 cp -f ./submithost/pegasus-wms-configuration-files/compute_env_json_template ./submithost/pegasus-wms-configuration-files/compute-env.json
 
 if [ "$( ls -A './submithost/LOCAL/shared-storage' )" ]; then
-   rm -rf ./submithost/LOCAL/shared-storage/*
+   rm -f ./submithost/LOCAL/shared-storage/*
 fi
 
 :

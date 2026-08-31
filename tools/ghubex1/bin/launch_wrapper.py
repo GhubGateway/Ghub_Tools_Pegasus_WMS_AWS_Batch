@@ -1,4 +1,4 @@
-#---------------------------------------------------------------------------------------------------
+ #---------------------------------------------------------------------------------------------------
 # launch_wrapper.py
 # Component of:
 #     https://github.com/GhubGateway/Ghub_Pegasus_WMS_Tutorial_and_Templates and
@@ -167,7 +167,9 @@ class LaunchWrapper():
             TOPDIR = os.getcwd()
             os.environ['TOPDIR'] = TOPDIR
             self.logger.info("os.environ['TOPDIR']: %s" %str(os.environ['TOPDIR']))
-             
+            os.environ["CONDOR_CONFIG"] = "/etc/condor/condor_config"             
+            self.logger.info("os.environ['CONDOR_CONFIG']: %s" %str(os.environ['CONDOR_CONFIG']))
+
             #BIN_DIR=`pegasus-config --bin`
             #echo "BIN_DIR: "$BIN_DIR
             #PEGASUS_LOCAL_BIN_DIR=${BIN_DIR}
@@ -393,7 +395,7 @@ class LaunchWrapper():
                             if returncode != 0:
                                 self.logger.warning ('pegasus-aws-batch-delete.sh returned nonzero exitCode: %s' %str(exitCode))
     
-                            shutil.rmtree(submit_dir)
+                            #shutil.rmtree(submit_dir)
                             return 0
                             
                         else:

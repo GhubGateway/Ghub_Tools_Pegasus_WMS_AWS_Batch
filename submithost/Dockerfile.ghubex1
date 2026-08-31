@@ -1,10 +1,10 @@
 #------------------------------------------------------------------------------------------------------------------------------
-# Dockerfile to build a Docker image running the Ghub ghubex1 Jupyter notebook with Pegasus WMS pegasus-aws-batch.
+# Dockerfile to build a Docker image running the Ghub ghubex1 Jupyter notebook with Pegasus WMS Batch.
 #
 # Component of: Ghub
 # Purpose: Run a Pegasus WMS workflow on Amazon AWS
 # Author: Renette Jones-Ivey
-# Date: July 2026
+# Date: August 2026
 #
 # Important: need to source ../pegasus-wms-configure.sh before building the ghub ghubex1 tool image Docker image.
 # See ../pegasus-wms-configure.sh for more information.
@@ -21,36 +21,39 @@
 # ====================================================================
 
 # Rocky Linux is an open-source enterprise operating system compatible with Red Hat Enterprise Linux.
-FROM rockylinux:8
-LABEL desc="ghub ghubex1 tool docker image for Pegasus WMS pegasus-aws-batch."
+#FROM rockylinux:8
+FROM ubuntu:24.04
+LABEL desc="ghub ghubex1 tool docker image for Pegasus WMS AWS Batch."
 
-RUN dnf -y update && \
-    dnf -y install 'dnf-command(config-manager)' && \
-    dnf -y config-manager --set-enabled powertools && \
-    dnf -y config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo && \
-    dnf -y install epel-release
+# Set environment variable to avoid interactive prompts during installation
+ENV DEBIAN_FRONTEND=noninteractive
 
-# gcc, gcc-c++ plus others
-RUN dnf -y groupinstall "Development Tools"
+USER root
 
-RUN dnf -y install --allowerasing --nobest \
-     curl \
-     docker-ce \
-     glibc-langpack-en \
-     java-11-openjdk-devel \
-     jq \
-     langpacks-en \
-     nano \
-     perl-Getopt-Long \
-     sudo \
-     supervisor \
-     tar \
-     vim \
-     wget
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \ 
+    ca-certificates \
+    curl \
+    openjdk-11-jdk \
+    dmsetup \    
+    gnupg \
+    jq \
+    locales \
+    lsb-release \
+    sudo \
+    supervisor \ 
+    wget \
+    && rm -rf /var/lib/apt/lists/*
 
 # Locale and timezone
-ENV LANG en_US.UTF-8
-RUN cp /usr/share/zoneinfo/America/New_York /etc/localtime
+RUN echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen
+# Set environment variables for the system language
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+#ENV LANG en_US.UTF-8
+#RUN cp /usr/share/zoneinfo/America/New_York /etc/localtime
 
 # ====================================================================
 # User Configurations
@@ -58,12 +61,15 @@ RUN cp /usr/share/zoneinfo/America/New_York /etc/localtime
 
 # jovyan is the default user in Jupyter Docker Stacks containers. The term is a pun on "Jovian" (like Jupiter), coined to represent members of the Jupyter community.
 
+#ubuntu groupadd: GID '1000' already exists
+#ubuntu useradd: UID 1000 is not unique
+
 # Set environment variables for Jupyter
 ENV TOOL=ghubex1
 ENV NB_USER=jovyan
-ENV NB_UID=1000
+ENV NB_UID=1001
 ENV NB_GROUP=jovyan
-ENV NB_GID=1000
+ENV NB_GID=1001
 ENV HOME=/home/${NB_USER}
 ENV SHELL=/bin/bash
 
@@ -75,42 +81,46 @@ RUN groupadd --gid ${NB_GID} ${NB_GROUP} || true && \
 
 #RUN usermod -aG sudo ${NB_USER}
 
+# ====================================================================
+# Docker installation using the apt repository
+# ====================================================================
+
+# https://docs.docker.com/engine/install/ubuntu/
+
+RUN install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc && \
+    chmod a+r /etc/apt/keyrings/docker.asc && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable" > /etc/apt/sources.list.d/docker.list
+
+# Install Docker CE, CLI, and containerd plugins
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin && \
+    rm -rf /var/lib/apt/lists/*
+
+# Expose default Docker daemon port (optional, useful if accessing remotely)
+EXPOSE 2375 2376
+
+CMD ["docker", "--version"]
 
 # ====================================================================
 # HTCondor installation
 # ====================================================================
 
-#RUN dnf -y config-manager --add-repo=https://research.cs.wisc.edu/htcondor/yum/repo.d/htcondor-stable-rhel8.repo && \
-#    rpm --import https://research.cs.wisc.edu/htcondor/yum/RPM-GPG-KEY-HTCondor && \
-#    dnf -y install condor minicondor && \
-#    sed -i 's/condor@/${NB_USER}@/g' /etc/condor/config.d/00-minicondor
+RUN curl -fsSL https://htcss-downloads.chtc.wisc.edu/repo/keys/HTCondor-24.0-Key -o /etc/apt/keyrings/htcondor.asc \
+    && curl -fsSL https://htcss-downloads.chtc.wisc.edu/repo/ubuntu/htcondor-24.0-noble.list -o /etc/apt/sources.list.d/htcondor.list
+RUN cat /etc/apt/sources.list.d/htcondor.list
 
-RUN wget https://research.cs.wisc.edu/htcondor/yum/RPM-GPG-KEY-HTCondor
-RUN rpm --import RPM-GPG-KEY-HTCondor
-
-# Download the official HTCondor repo file
-RUN cd /etc/yum.repos.d && \
-    wget https://research.cs.wisc.edu/htcondor/yum/repo.d/htcondor-stable-rhel8.repo
-RUN cat /etc/yum.repos.d/htcondor-stable-rhel8.repo
-#[htcondor-stable]
-#name=HTCondor Stable RPM Repository for Redhat Enterprise Linux 8
-#baseurl=https://research.cs.wisc.edu/htcondor/yum/stable/8.8/rhel8 - does not exist
-#enabled=1
-#gpgcheck=1
-#priority=90
-# https://research.cs.wisc.edu/htcondor/yum/stable/8.8/rhel8 to https://research.cs.wisc.edu/htcondor/repo/8.8/el8/release/ redirected to https://htcss-downloads.chtc.wisc.edu/repo/8.8/el8/release/
-# FIX: Replace $releasever DNF stops searching for non-existent subversion directories
-RUN sed -i 's|yum/stable/8.8/rhel8|repo/8.8/el8/release/|g' /etc/yum.repos.d/htcondor-stable-rhel8.repo
-RUN cat /etc/yum.repos.d/htcondor-stable-rhel8.repo
-
-# Clear dnf cache and install condor
-RUN dnf clean all && dnf install -y condor minicondor
-
-RUN sed -i 's/condor@/${NB_USER}@/g' /etc/condor/config.d/00-minicondor
- 
-RUN usermod -a -G condor ${NB_USER}
-RUN chmod -R g+w /var/{lib,log,lock,run}/condor
 ADD ./submithost/pegasus-wms-setup-files/config/10-dynamic-slots /etc/condor/config.d/10-dynamic-slots
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    htcondor \
+    minihtcondor \
+    && rm -rf /var/lib/apt/lists/*
+
+CMD ["htcondor", "--version"]
+CMD ["condor", "--version"]
+
+EXPOSE 9618
 
 # ====================================================================
 # Pegasus installation
@@ -118,11 +128,28 @@ ADD ./submithost/pegasus-wms-setup-files/config/10-dynamic-slots /etc/condor/con
 
 # Pegasus -- rebuild everything below here
 #            http://dev.im-bot.com/docker-select-caching/
-ARG CACHEBUST=1
-ARG PEGASUS_VERSION=5.0.9
-RUN dnf -y install https://download.pegasus.isi.edu/pegasus/$PEGASUS_VERSION/pegasus-$PEGASUS_VERSION-1.el8.x86_64.rpm
+#ARG CACHEBUST=1
+#ARG PEGASUS_VERSION=5.0.9
+#RUN dnf -y install https://download.pegasus.isi.edu/pegasus/$PEGASUS_VERSION/pegasus-$PEGASUS_VERSION-1.el8.x86_64.rpm
 # -f, --full, returns internal build metrics including the version. UTC time stamp, in ISO 8601 format, is appended to the version.
-RUN pegasus-version -f
+#RUN pegasus-version -f
+
+# https://pegasus.isi.edu/downloads/
+# Add the Pegasus GPG key
+RUN wget -O /etc/apt/trusted.gpg.d/pegasus.asc https://download.pegasus.isi.edu/pegasus/gpg.txt
+
+RUN echo $(dpkg --print-architecture)
+
+# Create the repository list file for Ubuntu 24.04
+#RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/htcondor.asc] https://wisc.edu noble stable" >/etc/apt/sources.list.d/htcondor.list
+#RUN echo 'deb [arch=$(dpkg --print-architecture)] https://download.pegasus.isi.edu/pegasus/ubuntu noble stable' | tee /etc/apt/sources.list.d/pegasus.list
+RUN echo 'deb [arch=amd64] https://download.pegasus.isi.edu/pegasus/ubuntu noble main' | sudo tee /etc/apt/sources.list.d/pegasus.list
+
+# Install HTCondor and Pegasus
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    pegasus \
+    && rm -rf /var/lib/apt/lists/*
 
 # ====================================================================
 # Anaconda installations
@@ -165,10 +192,6 @@ RUN /bin/bash install_conda_environment_and_kernel_from_yml.sh rocky8 pegasus-en
 #RUN jupyter nbextension enable --py --sys-prefix appmode
 #RUN jupyter serverextension enable --py --sys-prefix appmode
 
-# Locale and timezone
-ENV LANG en_US.UTF-8
-RUN cp /usr/share/zoneinfo/America/New_York /etc/localtime
-
 # ===================================================================
 # Pegasus AWS configurations
 # ====================================================================
@@ -191,6 +214,7 @@ ADD ./submithost/pegasus-wms-setup-files/config/start.sh /start.sh
 ADD ./submithost/pegasus-wms-setup-files/config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD ./submithost/pegasus-wms-setup-files/config/wrapdocker /usr/local/bin/wrapdocker
 ADD ./submithost/pegasus-wms-setup-files/config/htcondor-wrapper /usr/local/bin/htcondor-wrapper
+ADD ./submithost/pegasus-wms-setup-files/config/99-ubuntu-docker.conf /etc/condor/condor.d/99-ubuntu-docker.conf
 RUN chmod +x /usr/local/bin/wrapdocker /usr/local/bin/htcondor-wrapper
 RUN usermod -aG docker ${NB_USER}
 

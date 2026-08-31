@@ -4,7 +4,7 @@ import os
 
 # --- Spawner Configuration ---
 # Use DockerSpawner to create a container for each user.
-# DockerSpawner is a specific implementation that inherits from tenvironhe abstract Spawner class
+# DockerSpawner is a specific implementation that inherits from the abstract Spawner class
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
 
 # The Docker image each user gets

@@ -27,7 +27,7 @@ AMAZON_AWS_SECRET_ACCESS_KEY=$(awk -F ' = ' '{if (! ($0 ~ /^;/) && $0 ~ /aws_sec
 #echo 'AMAZON_AWS_SECRET_ACCESS_KEY: '${AMAZON_AWS_SECRET_ACCESS_KEY}
 
 # Get to a known state
-source ./pegasus-wms-unconfigure.sh
+source ./unconfigure_tool.sh
 
 perl -i -pe"s~AMAZON_AWS_ACCOUNT_ID~${AMAZON_AWS_ACCOUNT_ID}~g" ./remotehost/push-remotehostimage-to-ECR.sh
 perl -i -pe"s~AMAZON_AWS_REGION~${AMAZON_AWS_REGION}~g" ./remotehost/push-remotehostimage-to-ECR.sh
