@@ -16,16 +16,16 @@
 
 int main(int argc, char *argv[]) {
 
-    std::string username = argv[1];
+    std::string job_index = argv[1];
 
     // f.a contains the received lunch items
     
     std::ifstream fp1("f.a");
     std::ofstream fp2("f.b");
 
-    std::string lunch_items;
-    if (std::getline(fp1, lunch_items)) {
-        fp2 << "Hello " << username << "! Received lunch items: " << lunch_items << ".";
+    std::string received_lunch_items;
+    if (std::getline(fp1, received_lunch_items)) {
+        fp2 << "Job index: " << job_index << ". Received lunch items: " << received_lunch_items << ".";
     }
 
     fp1.close();

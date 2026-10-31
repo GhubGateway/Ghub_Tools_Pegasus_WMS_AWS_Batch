@@ -12,21 +12,22 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int main(int argc, char *argv[]) {
     
-    char *username = argv[1];
+    char *job_index = argv[1];
 
     // f.a contains the received lunch items
     
     FILE *fp1 = fopen("f.a", "r");
     FILE *fp2 = fopen("f.b", "w");
 
-    char lunch_items[512];
-    if (fgets(lunch_items, sizeof(lunch_items), fp1) != NULL) {
+    char received_lunch_items[512];
+    if (fgets(received_lunch_items, sizeof(received_lunch_items), fp1) != NULL) {
         // Remove trailing "\n" added by fgets
-        lunch_items[strcspn(lunch_items, "\n")] = 0;
-        fprintf(fp2, "Hello %s! Received lunch items: %s.", username, lunch_items);
+        received_lunch_items[strcspn(received_lunch_items, "\n")] = 0;
+        fprintf(fp2, "Job index: %s. Received lunch items: %s.", job_index, received_lunch_items);
     }
 
     fclose(fp1);

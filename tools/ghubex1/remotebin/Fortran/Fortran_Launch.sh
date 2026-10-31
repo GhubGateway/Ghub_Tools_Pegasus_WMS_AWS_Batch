@@ -1,25 +1,32 @@
-#!/bin/bash -l
+#!/bin/bash
 
 #--------------------------------------------------------------------------------
 # Fortran_Launch.sh
 # Component of:
 #     https://github.com/GhubGateway/Ghub_Pegasus_WMS_Tutorial_and_Templates and
 #     https://theghub.org/tools/ghubex1
-# Called from: a SLURM script
 # Also see Ghub, https://theghub.org/about
 #--------------------------------------------------------------------------------
+set -e
+start=$(date +%s)
 
 # Echo to stdout:
 echo "Fortran_Launch.sh: $@"
 
-start=$(date +%s)
+# First word of the command line = the program to run
+prog="${1%% *}"
+prog="${prog#./}"
+echo "prog: ":$prog
 
-module load ccrsoft/2023.01
-module load gcc/11.2.0
+# If it's a file staged into the job's working dir, make it executable
+if [ -f "./$prog" ]; then
+    chmod +x "./$prog"
+fi
 
 eval "$@"
 
 end=$(date +%s)
 echo "Elapsed Time: $(($end-$start)) seconds"
 
+# Success status (exit code 0)
 :

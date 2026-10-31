@@ -13,17 +13,17 @@
 program receive_lunch_items
     
     integer,parameter :: MAXSTRLEN=512
-    CHARACTER(LEN=MAXSTRLEN) :: username, lunch_items
+    CHARACTER(LEN=MAXSTRLEN) :: job_index, received_lunch_items
 
-    call getarg(1, username)
+    call getarg(1, job_index)
 
     ! f.a contains the received lunch items
 
     open(1, file='f.a', status='old')
     open(2, file='f.b', status='replace')
     
-    read(1,'(A)') lunch_items
-    write(2,'(5A)') 'Hello ', trim(username), '! Received lunch items: ', trim(lunch_items), '.'
+    read(1,'(A)') received_lunch_items
+    write(2,'(5A)') 'Job index: ', trim(job_index), '. Received lunch items: ', trim(received_lunch_items), '.'
 
     close(1)
     close(2)

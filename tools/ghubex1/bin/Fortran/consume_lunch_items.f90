@@ -13,7 +13,9 @@
 program consume_lunch_items
     
     integer,parameter :: MAXSTRLEN=512
-    CHARACTER(LEN=MAXSTRLEN) :: served_lunch_items
+    CHARACTER(LEN=MAXSTRLEN) :: job_index, served_lunch_items
+
+    call getarg(1, job_index)
 
     ! f.b contains the served lunch items
 
@@ -21,8 +23,10 @@ program consume_lunch_items
     open(2, file='f.c', status='replace')
     
     read(1,'(A)') served_lunch_items
-    write(2,'(2A)') trim(served_lunch_items), ' Thank you for lunch. Yum Yum!!'
-
+    ! gfortran stops reading a free-form line at column 132, or at column 72 in fixed-form
+    write(2,'(4A)') trim(served_lunch_items), 'Job index: ', trim(job_index), &
+        '. Consumed lunch items! Thank you for lunch. Yum Yum!!'
+ 
     close(1)
     close(2)
     

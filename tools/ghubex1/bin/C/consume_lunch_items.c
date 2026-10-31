@@ -12,9 +12,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 int main(int argc, char *argv[]) {
     
+    char *job_index = argv[1];
+
     // f.b contains the served lunch items
     
     FILE *fp1 = fopen("f.b", "r");
@@ -29,7 +32,7 @@ int main(int argc, char *argv[]) {
     if (fgets(served_lunch_items, sizeof(served_lunch_items), fp1) != NULL) {
         // Remove trailing "\n" added by fgets
         served_lunch_items[strcspn(served_lunch_items, "\n")] = 0;
-        fprintf(fp2, "%s Thank you for lunch. Yum Yum!!", served_lunch_items);
+        fprintf(fp2, "%s Job index %s. Consumed lunch items! Thank you for lunch. Yum Yum!!", served_lunch_items, job_index);
     }
 
     fclose(fp1);

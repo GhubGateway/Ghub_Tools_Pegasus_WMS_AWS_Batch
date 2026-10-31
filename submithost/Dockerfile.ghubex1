@@ -1,13 +1,13 @@
 #------------------------------------------------------------------------------------------------------------------------------
-# Dockerfile to build a Docker image running the Ghub ghubex1 Jupyter notebook with Pegasus WMS Batch.
+# Dockerfile to build a Docker image running the Ghub ghubex1 Jupyter notebook with Pegasus WMS AWS Batch.
 #
-# Component of: Ghub
+# Component of: GhubTools
 # Purpose: Run a Pegasus WMS workflow on Amazon AWS
-# Author: Renette Jones-Ivey
-# Date: August 2026
+# Author: Renette Jones-Ivey, August Skies, LLC
+# Date: October 2026
 #
-# Important: need to source ../pegasus-wms-configure.sh before building the ghub ghubex1 tool image Docker image.
-# See ../pegasus-wms-configure.sh for more information.
+# Important: need to source ../configure_tool.sh before building the ghub ghubex1 tool image Docker image.
+# See ../configure_tool.sh for more information.
 #------------------------------------------------------------------------------------------------------------------------------
 
 # References:
@@ -20,8 +20,7 @@
 # System installations
 # ====================================================================
 
-# Rocky Linux is an open-source enterprise operating system compatible with Red Hat Enterprise Linux.
-#FROM rockylinux:8
+# A major enterprise-grade Linux operating system released by Canonical on April 25, 2024.
 FROM ubuntu:24.04
 LABEL desc="ghub ghubex1 tool docker image for Pegasus WMS AWS Batch."
 
@@ -34,12 +33,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \ 
     ca-certificates \
     curl \
-    openjdk-11-jdk \
     dmsetup \    
     gnupg \
     jq \
     locales \
     lsb-release \
+    octave \
+    openjdk-11-jdk \
     sudo \
     supervisor \ 
     wget \
@@ -80,6 +80,9 @@ RUN groupadd --gid ${NB_GID} ${NB_GROUP} || true && \
     useradd --gid ${NB_GID} --uid ${NB_UID} --create-home --password '$6$ouJkMasm5X8E4Aye$QTFH2cHk4b8/TmzAcCxbTz7Y84xyNFs.gqm/HWEykdngmOgELums1qOi3e6r8Z.j7GEA9bObS/2pTN1WArGNf0' ${NB_USER}
 
 #RUN usermod -aG sudo ${NB_USER}
+#RUN usermod -aG sudo ${NB_USER} && \
+#    echo "${NB_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/${NB_USER} && \
+#    chmod 0440 /etc/sudoers.d/${NB_USER}
 
 # ====================================================================
 # Docker installation using the apt repository
@@ -108,9 +111,11 @@ CMD ["docker", "--version"]
 
 RUN curl -fsSL https://htcss-downloads.chtc.wisc.edu/repo/keys/HTCondor-24.0-Key -o /etc/apt/keyrings/htcondor.asc \
     && curl -fsSL https://htcss-downloads.chtc.wisc.edu/repo/ubuntu/htcondor-24.0-noble.list -o /etc/apt/sources.list.d/htcondor.list
-RUN cat /etc/apt/sources.list.d/htcondor.list
+#RUN cat /etc/apt/sources.list.d/htcondor.list
 
 ADD ./submithost/pegasus-wms-setup-files/config/10-dynamic-slots /etc/condor/config.d/10-dynamic-slots
+
+# Install HTCondor
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     htcondor \
@@ -128,11 +133,6 @@ EXPOSE 9618
 
 # Pegasus -- rebuild everything below here
 #            http://dev.im-bot.com/docker-select-caching/
-#ARG CACHEBUST=1
-#ARG PEGASUS_VERSION=5.0.9
-#RUN dnf -y install https://download.pegasus.isi.edu/pegasus/$PEGASUS_VERSION/pegasus-$PEGASUS_VERSION-1.el8.x86_64.rpm
-# -f, --full, returns internal build metrics including the version. UTC time stamp, in ISO 8601 format, is appended to the version.
-#RUN pegasus-version -f
 
 # https://pegasus.isi.edu/downloads/
 # Add the Pegasus GPG key
@@ -141,11 +141,9 @@ RUN wget -O /etc/apt/trusted.gpg.d/pegasus.asc https://download.pegasus.isi.edu/
 RUN echo $(dpkg --print-architecture)
 
 # Create the repository list file for Ubuntu 24.04
-#RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/htcondor.asc] https://wisc.edu noble stable" >/etc/apt/sources.list.d/htcondor.list
-#RUN echo 'deb [arch=$(dpkg --print-architecture)] https://download.pegasus.isi.edu/pegasus/ubuntu noble stable' | tee /etc/apt/sources.list.d/pegasus.list
 RUN echo 'deb [arch=amd64] https://download.pegasus.isi.edu/pegasus/ubuntu noble main' | sudo tee /etc/apt/sources.list.d/pegasus.list
 
-# Install HTCondor and Pegasus
+# Install Pegasus
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     pegasus \
@@ -164,7 +162,7 @@ COPY ./anaconda/Miniconda3-py310_25.11.1-1-Linux-x86_64.sh /home/anaconda
 
 WORKDIR /home/anaconda
 
-ENV CONDA_DIR=/home/anaconda/rocky8
+ENV CONDA_DIR=/home/anaconda/ubuntu24
 RUN chmod +x Miniconda3-py310_25.11.1-1-Linux-x86_64.sh
 RUN /bin/bash Miniconda3-py310_25.11.1-1-Linux-x86_64.sh -b -p $CONDA_DIR
 ENV PATH=$CONDA_DIR/bin:$PATH
@@ -180,12 +178,12 @@ RUN conda install -c conda-forge --name base jupyter jupyterhub==5.2.1 -y
 WORKDIR /home
 
 COPY ./anaconda/install_conda_environment_and_kernel_from_yml.sh /home/anaconda/install_conda_environment_and_kernel_from_yml.sh
-COPY ./anaconda/rocky8_pegasus-env_environment.yml /home/anaconda/rocky8_pegasus-env_environment.yml
+COPY ./anaconda/ubuntu24_pegasus-env_environment.yml /home/anaconda/ubuntu24_pegasus-env_environment.yml
 WORKDIR /home/anaconda
 
 # Install the pegasus-wms environment and kernel
 RUN chmod +x install_conda_environment_and_kernel_from_yml.sh
-RUN /bin/bash install_conda_environment_and_kernel_from_yml.sh rocky8 pegasus-env
+RUN /bin/bash install_conda_environment_and_kernel_from_yml.sh ubuntu24 pegasus-env
 
 # Appmode - Jupyter extension that turns notebooks into web applications
 #RUN python3 -m pip install appmode
@@ -237,7 +235,9 @@ ADD ./submithost/pegasus-wms-configuration-files/job-definition.json /home/${NB_
 # job-definition.json can be updated with a user selected parameter for each workflow run.
 ADD ./submithost/pegasus-wms-configuration-files/job-definition.json /home/${NB_USER}/ghubex1/conf/job_definition_json_template
 ADD ./submithost/pegasus-wms-configuration-files/job-queue.json /home/${NB_USER}/ghubex1/conf/job-queue.json
-ADD ./submithost/pegasus-wms-configuration-files/sites.xml /home/${NB_USER}/ghubex1/conf/sites.xml
+#ADD ./submithost/pegasus-wms-configuration-files/sites.yml /home/${NB_USER}/ghubex1/conf/sites.yml
+
+RUN mkdir /home/${NB_USER}/ghubex1/shared-scratch
 
 # Set up config for ensemble manager and service
 #RUN mkdir /home/${NB_USER}/.pegasus \
@@ -262,16 +262,14 @@ RUN chmod 555 /home/${NB_USER}/ghubex1/remotebin/CPP/CPP_Build.sh
 RUN chmod 555 /home/${NB_USER}/ghubex1/remotebin/CPP/CPP_Launch.sh
 RUN chmod 555 /home/${NB_USER}/ghubex1/remotebin/Fortran/Fortran_Build.sh
 RUN chmod 555 /home/${NB_USER}/ghubex1//remotebin/Fortran/Fortran_Launch.sh
-#TODO: MATLAB to Octave
-#RUN chmod 555 /home/${NB_USER}/ghubex1//remotebin/MATLAB/MATLAB_Build.sh
-#RUN chmod 555 /home/${NB_USER}/ghubex1//remotebin/MATLAB/MATLAB_Launch.sh
+RUN chmod 555 /home/${NB_USER}/ghubex1//remotebin/Octave/Octave_Launch.sh
 RUN chmod 555 /home/${NB_USER}/ghubex1/remotebin/Python/Python_Launch.sh
 RUN chmod 555 /home/${NB_USER}/ghubex1/remotebin/R/R_Launch.sh
 
 RUN chown -R ${NB_USER}:${NB_GROUP} /home/${NB_USER}
 
 # User setup
-RUN echo -e "${NB_USER} ALL=(ALL)       NOPASSWD:ALL\n" >> /etc/sudoers
+#RUN echo -e "${NB_USER} ALL=(ALL)       NOPASSWD:ALL\n" >> /etc/sudoers
 USER ${NB_USER}
 
 WORKDIR /home/${NB_USER}

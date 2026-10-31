@@ -3,7 +3,7 @@
 # Component of:
 #     https://github.com/GhubGateway/Ghub_Pegasus_WMS_Tutorial_and_Templates and
 #     https://theghub.org/tools/ghubex1
-# Called from: Python_Launch.sh
+# Called from: R_Launch.sh
 # Also see Ghub, https://theghub.org/about
 #--------------------------------------------------------------------------------
 
@@ -12,13 +12,15 @@
 
 main <- function(argv) {
     
+    job_index <- argv[1]
+  
     # f.b contains the served lunch items
 
     fp1 <- file('f.b', 'r')
     fp2 <- file('f.c', 'w')
 
     served_lunch_items <- readLines(fp1, n=1)
-    writeLines(sprintf('%s Thank you for lunch. Yum Yum!!', served_lunch_items), fp2)
+    writeLines(sprintf('%s Job index: %s. Consumed lunch items! Thank you for lunch. Yum Yum!!', served_lunch_items, job_index), fp2)
     
     close(fp1)
     close(fp2)

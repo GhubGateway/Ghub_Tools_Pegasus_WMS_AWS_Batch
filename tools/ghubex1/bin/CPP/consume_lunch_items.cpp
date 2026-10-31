@@ -3,7 +3,7 @@
 // Component of:
 //     https://github.com/GhubGateway/Ghub_Pegasus_WMS_Tutorial_and_Templates and
 //     https://theghub.org/tools/ghubex1
-// Called from: C++_Launch.sh
+// Called from: CPP_Launch.sh
 // Also see Ghub, https://theghub.org/about
 //--------------------------------------------------------------------------------
 
@@ -16,6 +16,8 @@
 
 int main(int argc, char *argv[]) {
     
+    std::string job_index = argv[1];
+
     // f.b contains the served lunch items
     
     std::ifstream fp1("f.b");
@@ -23,7 +25,7 @@ int main(int argc, char *argv[]) {
 
     std::string served_lunch_items;
     if (std::getline(fp1, served_lunch_items)) {
-        fp2 << served_lunch_items << " Thank you for lunch. Yum Yum!!";
+        fp2 << served_lunch_items << " Job index: " << job_index << ". Consumed lunch items! Thank you for lunch. Yum Yum!!";
     }
 
     fp1.close();

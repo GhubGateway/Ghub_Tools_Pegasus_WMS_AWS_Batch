@@ -14,6 +14,8 @@ import sys
 
 def main(argv):
     
+    job_index = argv[1]
+    
     # f.b contains the served lunch items
 
     fp1 = open ('f.b', 'r')
@@ -21,7 +23,7 @@ def main(argv):
 
     # Remove trailing "\n" added by fp1
     served_lunch_items = fp1.readline().rstrip()
-    fp2.write('%s Thank you for lunch. Yum Yum!!' %served_lunch_items)
+    fp2.write('%s Job index: %s. Consumed lunch items! Thank you for lunch. Yum Yum!!' %(served_lunch_items, job_index))
     
     fp1.close()
     fp2.close()

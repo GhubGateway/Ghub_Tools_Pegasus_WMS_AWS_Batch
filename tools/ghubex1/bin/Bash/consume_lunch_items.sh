@@ -1,4 +1,4 @@
-# !/bin/bash -l
+# !/bin/bash
 
 #--------------------------------------------------------------------------------
 # consume_lunch_items.sh
@@ -12,8 +12,10 @@
 # In the Pegasus WMS YAML file,
 # this job is specified to have the f.b input file and the f.c output file
 
+job_index=${1}
+
 # f.b contains the served lunch items
 
-echo -e "`cat f.b` Thank you for lunch. Yum Yum!!" > f.c
+echo -e "`cat f.b` Job Index: ${job_index}. Consumed lunch items! Thank you for lunch. Yum Yum!!" > f.c
 
 # f.c contains the thank you note

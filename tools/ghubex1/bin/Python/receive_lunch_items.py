@@ -14,7 +14,7 @@ import sys
  
 def main(argv):
     
-    username = argv[1]
+    job_index = argv[1]
     
     # f.a contains the received lunch items
 
@@ -22,8 +22,8 @@ def main(argv):
     fp2 = open ('f.b', 'w')
     
     # Remove trailing "\n" added by fp1
-    lunch_items = fp1.readline().rstrip()
-    fp2.write ('Hello %s! Received lunch items: %s.' %(username, lunch_items))
+    received_lunch_items = fp1.readline().rstrip()
+    fp2.write ('Job index: %s. Received lunch items: %s.' %(job_index, received_lunch_items))
     
     fp1.close()
     fp2.close()

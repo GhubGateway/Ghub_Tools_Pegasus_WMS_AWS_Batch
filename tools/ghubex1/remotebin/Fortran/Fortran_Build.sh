@@ -1,4 +1,4 @@
-#!/bin/bash -l
+#!/bin/bash
 
 #--------------------------------------------------------------------------------
 # Fortran_Build.sh
@@ -8,14 +8,11 @@
 # Called from: a SLURM script
 # Also see Ghub, https://theghub.org/about
 #--------------------------------------------------------------------------------
-
-# Echo to stdout:
-echo "Fortran_Build.sh"
-
+set -e
 start=$(date +%s)
 
-module load ccrsoft/2023.01
-module load gcc/11.2.0
+# Echo to stdout:
+echo "Fortran_Build.sh: $@"
 
 # gfortran creates Fortran executables to run on a platform corresponding to the platform on which they are generated.
 
@@ -25,10 +22,10 @@ echo 'gfortran: '${gfortran}
 # -v: verbose
 # -o: output file
 
-${gfortran} -v ./receive_lunch_items.f90 -o receive_lunch_items
-${gfortran} -v ./consume_lunch_items.f90 -o consume_lunch_items
+${gfortran} -v ./$1 -o ./$2
 
 end=$(date +%s)
 echo "Elapsed Time: $(($end-$start)) seconds"
 
+# Success status (exit code 0)
 :
