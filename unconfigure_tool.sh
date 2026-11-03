@@ -1,8 +1,10 @@
 #!/bin/bash
 
-rm -f ./submithost/build.log
-rm -f ./remotehost/build.log
+rm -f ./build.log
 rm -f ./anaconda/Miniconda3-py310_25.11.1-1-Linux-x86_64.sh
+rm -f ./submithost/Dockerfile.hub 
+rm -f ./submithost/docker-compose.yml
+rm -rf ./submithost/.env
 
 cp -f ./submithost/pegasusrc_template ./submithost/pegasusrc
 cp -f ./submithost/amazon-aws-credentials/.aws/aws_config_template ./submithost/amazon-aws-credentials/.aws/config

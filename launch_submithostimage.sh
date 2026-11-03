@@ -4,7 +4,7 @@ echo "launching "${tool_alias_name}"..."
 
 source ./remove_jupyterhub.sh
 
-cp -f ./jupyterhub/Dockerfile.hub ./submithost
-cp -f ./jupyterhub/docker-compose.yml ./submithost
+(cd ./submithost && docker compose build --no-cache && docker compose up)
 
-(cd ./submithost && docker compose up --build)
+# While the Hub is running, verify the Hub's password by entering the following in a terminal window:
+#docker exec jupyterhub printenv HUB_USER_PASSWORD

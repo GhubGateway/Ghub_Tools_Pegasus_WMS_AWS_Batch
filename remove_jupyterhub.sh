@@ -11,7 +11,7 @@ docker volume prune -f
 
 echo "Removing the jupyterhub image and cleaning the image cache..."
 docker images --format "{{.Repository}}:{{.Tag}}" | grep "jupyterhub" | xargs -r docker rmi -f
-docker image prune -f
+#docker image prune -f
 
 echo "Cleaning the build cache..."
-docker builder prune -f
+#docker builder prune -f

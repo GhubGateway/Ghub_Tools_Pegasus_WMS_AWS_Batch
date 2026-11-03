@@ -4,7 +4,7 @@
 # Component of: GhubTools
 # Purpose: Run a Pegasus WMS workflow on Amazon AWS
 # Author: Renette Jones-Ivey, August Skies, LLC
-# Date: October 2026
+# Date: November 2026
 #
 # Important: need to source ../configure_tool.sh before building the ghub ghubex1 tool image Docker image.
 # See ../configure_tool.sh for more information.
@@ -13,9 +13,10 @@
 # References:
 # https://github.com/pegasus-isi/pegasus/tree/master/tutorial/docker/Dockerfile
 # https://pegasus.isi.edu/documentation/user-guide/tutorial.html
-# https://pegasus.isi.edu/documentation/user-guide/deployment-scenarios.html#
+# https://pegasus.isi.edu/documentation/user-guide/deployment-scenarios.html
 # https://aws.amazon.com/blogs/compute/creating-a-simple-fetch-and-run-aws-batch-job
-
+# Anthropic Claude
+#
 # ====================================================================
 # System installations
 # ====================================================================
@@ -38,7 +39,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     jq \
     locales \
     lsb-release \
-    octave \
     openjdk-11-jdk \
     sudo \
     supervisor \ 
@@ -170,9 +170,10 @@ RUN which conda
 RUN conda --version
 
 # The version of the jupyterhub package installed must be the same version used by the main Hub.
+# Also see ../jupyterhub/Dockerfile.hub.
 RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main
 RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r 
-RUN conda install -c conda-forge --name base jupyter jupyterhub==5.2.1 -y
+RUN conda install -c conda-forge --name base jupyter jupyterhub==5.5.1 -y
 #RUN jupyter nbextension enable --py --sys-prefix widgetsnbextension
 
 WORKDIR /home
@@ -287,8 +288,8 @@ RUN echo -e "export PATH=/home/${NB_USER}/.pyenv/bin:\$PATH:/usr/lib64/mpich/bin
 #RUN mkdir /home/${NB_USER}/.jupyter \
 RUN echo "{ \"NotebookApp\": { \"password\": \"sha1:30a323540baa:6eec8eaf3b4e0f44f2f2aa7b504f80d5bf0ad745\" } }" >> /home/${NB_USER}/.jupyter/jupyter_notebook_config.json
 
-# For testing:
-# docker run -it ghubex1_tool_image /bin/bash
+# For initial testing, comment out the USER root and the CMD, enter on command line:
+#docker run -it ghubex1_tool_image /bin/bash
 USER root
 CMD ["/start.sh"]
 

@@ -10,7 +10,11 @@ This Jupyter Notebook tool repository provides an introductory tutorial and temp
 
 - The tool also runs two additional Docker images, a remotehostimage Docker image and a submithostimage Docker image. The remotehostimage Docker image is the Fetch & Run Docker image and contains software to run the scripts and build and launch the binary executables for the templates, and, also includes the Bash Fetch & Run script and ENTRYPOINT. The submithostimage Docker image contains the software required to implement the workflow, including a Jupyter Notebook as the interface for running the workflow, HTCondor, and the Pegasus WMS.
 
-## One-Time Amazon AWS Batch Setup
+## One-Time Security Setup
+
+- The JupyterHub is setup to use shared password authentification. Create the file ~./ghubenv and set HUB_USER_PASSWORD=\<your hub user password> in this file.
+
+## One-Time Amazon AWS Batch Setups
 
 This tool requires that you complete the following prerequisites for configuring Amazon AWS Batch.
 
@@ -49,6 +53,10 @@ This tool's ./remosthost and ./submithost directories contain templates for the 
 
 - **Note: source ./pegasus-wms-configure.sh must be executed before building the remotehostimage and submithostimage Docker images.**
 
+## Start the Docker Daemon
+
+Tested with Docker 4.17.0 on a 2017 iMac running the Ventura 13.7.8 operating system.  
+
 ## Build the Docker Images
 
 ### Build the remotehostimage Docker image and push the image to the Amazon Elastic Cloud Registry (ECR).
@@ -65,11 +73,11 @@ This tool's ./remosthost and ./submithost directories contain templates for the 
 
 ### Launch a Jupyter Notebook stored locally using JupyterHub DockerSpawner
 
-Enter source ./launch_submithostimage.sh ghubex1 to start a JupyterHub and Server and run the tool's Docker image. This runs a single-user JupyterHub and Server using the jupyterhub.auth.DummyAuthenticator for development testing only.
+Enter source ./launch_submithostimage.sh ghubex1 to start a JupyterHub and Server and run the tool's Docker image. This runs a single-user JupyterHub and Server using the JupyterHub.authenticator_class = 'shared-password' for local testing only.
 
 ### Login to JupyterHub
 
-When the *JupyterHub is now running at...*  message appears, open a web browser and enter the URL: localhost\:8000, sign in with username: jovyan, password is not required. DockerSpawner will take the authenicated user and spin up an individual, isolated single-user notebook server inside a Docker container. Open the tool's ghubex1.ipynb Jupyter notebook and select Restart Kernel and Run All Cells.
+When the *JupyterHub is now running at...*  message appears, open a web browser and enter the URL: localhost\:8000, sign in with username: jovyan and password: \<HUB_USER_PASSWORD>, see the  One-Time Setup section above for more information. . DockerSpawner will take the authenicated user and spin up an individual, isolated single-user notebook server inside a Docker container. Open the tool's ghubex1.ipynb Jupyter notebook and select Restart Kernel and Run All Cells.
 
 Follow the processing steps in ghubex1.ipynb to launch and run the workflow.
 

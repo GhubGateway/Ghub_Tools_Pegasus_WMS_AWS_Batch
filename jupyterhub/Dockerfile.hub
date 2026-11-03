@@ -1,6 +1,6 @@
 # Dockerfile.hub - Custom JupyterHub image for DockerSpawner
 
-FROM jupyterhub/jupyterhub:5.2.1
+FROM jupyterhub/jupyterhub:5.5.1
 
 # The cryocloud-test:local image is designed as a local test environment for the CryoCloud JupyterHub project. See https://github.com/CryoInTheCloud/hub-image.
 #FROM cryocloud-test:local

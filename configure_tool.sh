@@ -29,6 +29,10 @@ AMAZON_AWS_SECRET_ACCESS_KEY=$(awk -F ' = ' '{if (! ($0 ~ /^;/) && $0 ~ /aws_sec
 # Get to a known state
 source ./unconfigure_tool.sh
 
+cp -f ./jupyterhub/Dockerfile.hub ./submithost
+cp -f ./jupyterhub/docker-compose.yml ./submithost
+cp -rf ~/.ghubenv ./submithost/.env
+
 perl -i -pe"s~AMAZON_AWS_ACCOUNT_ID~${AMAZON_AWS_ACCOUNT_ID}~g" ./remotehost/push-remotehostimage-to-ECR.sh
 perl -i -pe"s~AMAZON_AWS_REGION~${AMAZON_AWS_REGION}~g" ./remotehost/push-remotehostimage-to-ECR.sh
 
